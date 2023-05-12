@@ -1,9 +1,11 @@
-import DateForm from "./components/DateForm";
+import Holiday from "./components/Holiday";
+import HolidayForm from "./components/HolidayForm";
 
 function App() {
     return (
-        <div className="h-screen font-Poppins">
-            <DateForm />
+        <div className="p-20 h-screen flex flex-col items-center font-Poppins">
+            <HolidayForm />
+            <Holiday />
         </div>
     );
 }
