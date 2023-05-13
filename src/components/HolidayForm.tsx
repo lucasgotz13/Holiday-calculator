@@ -1,34 +1,36 @@
+import { useContext, useEffect } from "react";
+import { HolidayContext } from "../context/HolidayContext";
+
 const HOLIDAYS = [
     {
-        date: new Date("01/01/2023"),
+        date: new Date("2023-01-01"),
         name: "Año nuevo",
     },
     {
-        date: new Date("24/03/2023"),
+        date: new Date("2023-03-24"),
         name: "Día Nacional de la Memoria por la Verdad y la Justicia",
     },
     {
-        date: new Date("07/04/2023"),
+        date: new Date("2023-04-07"),
         name: "Viernes Santo",
     },
     {
-        date: new Date("25/05/2023"),
+        date: new Date("2023-05-25"),
         name: "Día de la Revolución de Mayo",
     },
     {
-        date: new Date("20/06/2023"),
+        date: new Date("2023-06-20"),
         name: "Paso a la Inmortalidad del General Manuel Belgrano",
     },
     {
-        date: new Date("21/08/2023"),
+        date: new Date("2023-08-21"),
         name: "Paso a la Inmortalidad del General José de San Martín",
     },
     {
-        date: new Date("20/11/2023"),
+        date: new Date("2023-11-20"),
         name: "Día de la Soberanía Nacional",
     },
 ];
-
 const today = new Date();
 const nextHoliday = HOLIDAYS.find((holiday) => holiday.date > today) || {
     ...HOLIDAYS[0],
@@ -40,8 +42,40 @@ const nextHoliday = HOLIDAYS.find((holiday) => holiday.date > today) || {
 };
 
 const diferenciaEnMilisegundos = nextHoliday.date.getTime() - today.getTime();
+
 const diferenciaEnDias = Math.round(diferenciaEnMilisegundos / 86400000);
+console.log(diferenciaEnDias);
+const diferenciaEnMeses = Math.round(diferenciaEnDias / 30);
+console.log(diferenciaEnMeses);
+const diferenciaEnAños = Math.round(diferenciaEnMeses / 12);
+console.log(diferenciaEnAños);
+
 function HolidayForm() {
+    const { day, month, year, setDay, setMonth, setYear } =
+        useContext(HolidayContext);
+
+    useEffect(() => {
+        if (
+            (diferenciaEnDias >= 31 && (today.getMonth() + 1) % 2 === 0) ||
+            (diferenciaEnDias >= 31 && today.getMonth() + 1 === 8)
+        ) {
+            setDay(diferenciaEnDias - 31);
+            setMonth(diferenciaEnMeses);
+            setYear(diferenciaEnAños);
+            console.log(day);
+        } else if (diferenciaEnDias > 30 && (today.getMonth() + 1) % 2 !== 0) {
+            setDay(diferenciaEnDias - 30);
+            setMonth(diferenciaEnMeses);
+            setYear(diferenciaEnAños);
+            console.log(day);
+            console.log(month);
+        } else {
+            setDay(diferenciaEnDias);
+            setMonth(0);
+            setYear(0);
+        }
+    }, [day, month, year]);
+
     return (
         <form className="mt-20 flex items-center gap-5 justify-center">
             <div className="flex flex-col">
