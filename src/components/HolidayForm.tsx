@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { HolidayContext } from "../context/HolidayContext";
 
 const HOLIDAYS = [
@@ -31,50 +31,87 @@ const HOLIDAYS = [
         name: "Día de la Soberanía Nacional",
     },
 ];
-const today = new Date();
-const nextHoliday = HOLIDAYS.find((holiday) => holiday.date > today) || {
-    ...HOLIDAYS[0],
-    date: new Date(
-        HOLIDAYS[0].date.getFullYear() + 1,
-        HOLIDAYS[0].date.getMonth(),
-        HOLIDAYS[0].date.getDate() + 1
-    ),
-};
-
-const diferenciaEnMilisegundos = nextHoliday.date.getTime() - today.getTime();
-
-const diferenciaEnDias = Math.round(diferenciaEnMilisegundos / 86400000);
-console.log(diferenciaEnDias);
-const diferenciaEnMeses = Math.round(diferenciaEnDias / 30);
-console.log(diferenciaEnMeses);
-const diferenciaEnAños = Math.round(diferenciaEnMeses / 12);
-console.log(diferenciaEnAños);
 
 function HolidayForm() {
-    const { day, month, year, setDay, setMonth, setYear } =
-        useContext(HolidayContext);
+    const [dayValue, setDayValue] = useState<string>();
+    const [monthValue, setMonthValue] = useState<string>();
+    //@ts-ignore
+    const { day, month, setDay, setMonth } = useContext(HolidayContext);
 
-    useEffect(() => {
+    const handleForm = (e: object) => {
+        //@ts-ignore
+        e.preventDefault();
+        //@ts-ignore
+        const today: Date = new Date(`2023-${monthValue}-${dayValue}`);
+        //@ts-ignore
+        if (isNaN(today)) return;
+        const nextHoliday = HOLIDAYS.find(
+            (holiday) => holiday.date > today
+        ) || {
+            ...HOLIDAYS[0],
+            date: new Date(
+                HOLIDAYS[0].date.getFullYear() + 1,
+                HOLIDAYS[0].date.getMonth(),
+                HOLIDAYS[0].date.getDate() + 1
+            ),
+        };
+
+        const diferenciaEnMilisegundos: number =
+            nextHoliday.date.getTime() - today.getTime();
+        const diferenciaEnDias: number = Math.round(
+            diferenciaEnMilisegundos / 86400000
+        );
+        const diferenciaEnMeses: number = Math.floor(diferenciaEnDias / 30);
+
+        handleDayMonth(today, diferenciaEnDias, diferenciaEnMeses);
+    };
+
+    const handleDayMonth = (
+        today: Date,
+        diferenciaEnDias: number,
+        diferenciaEnMeses: number
+    ) => {
         if (
             (diferenciaEnDias >= 31 && (today.getMonth() + 1) % 2 === 0) ||
             (diferenciaEnDias >= 31 && today.getMonth() + 1 === 8)
         ) {
             setDay(diferenciaEnDias - 31);
             setMonth(diferenciaEnMeses);
-            setYear(diferenciaEnAños);
-            console.log(day);
-        } else if (diferenciaEnDias > 30 && (today.getMonth() + 1) % 2 !== 0) {
-            setDay(diferenciaEnDias - 30);
+        } else if (diferenciaEnDias % 30 === 0) {
+            setDay(0);
             setMonth(diferenciaEnMeses);
-            setYear(diferenciaEnAños);
-            console.log(day);
-            console.log(month);
+        } else if (diferenciaEnDias >= 30 && (today.getMonth() + 1) % 2 !== 0) {
+            setDay(diferenciaEnDias - 30 * diferenciaEnMeses);
+            setMonth(diferenciaEnMeses);
         } else {
             setDay(diferenciaEnDias);
-            setMonth(0);
-            setYear(0);
+            setMonth(diferenciaEnMeses);
         }
-    }, [day, month, year]);
+    };
+
+    useEffect(() => {
+        const today = new Date();
+        const nextHoliday = HOLIDAYS.find(
+            (holiday) => holiday.date > today
+        ) || {
+            ...HOLIDAYS[0],
+            date: new Date(
+                HOLIDAYS[0].date.getFullYear() + 1,
+                HOLIDAYS[0].date.getMonth(),
+                HOLIDAYS[0].date.getDate() + 1
+            ),
+        };
+
+        const diferenciaEnMilisegundos =
+            nextHoliday.date.getTime() - today.getTime();
+
+        const diferenciaEnDias = Math.round(
+            diferenciaEnMilisegundos / 86400000
+        );
+        const diferenciaEnMeses = Math.floor(diferenciaEnDias / 30);
+
+        handleDayMonth(today, diferenciaEnDias, diferenciaEnMeses);
+    }, []);
 
     return (
         <form className="mt-20 flex items-center gap-5 justify-center">
@@ -90,6 +127,8 @@ function HolidayForm() {
                     type="number"
                     name="day"
                     id="day"
+                    placeholder="24"
+                    onChange={(e) => setDayValue(e.target.value)}
                 />
             </div>
             <div className="flex flex-col">
@@ -104,23 +143,11 @@ function HolidayForm() {
                     type="number"
                     name="month"
                     id="month"
+                    placeholder="05"
+                    onChange={(e) => setMonthValue(e.target.value)}
                 />
             </div>
-            <div className="flex flex-col">
-                <label
-                    htmlFor="year"
-                    className="text-MentorSmokeyGrey text-xl tracking-widest"
-                >
-                    Year
-                </label>
-                <input
-                    className="max-w-xs p-5 text-inputSize border-2 border-white rounded-md outline-none focus:border-MentorPurple caret-MentorPurple"
-                    type="number"
-                    name="year"
-                    id="year"
-                />
-            </div>
-            <button onClick={(e) => e.preventDefault()}>Submit</button>
+            <button onClick={handleForm}>Submit</button>
         </form>
     );
 }
