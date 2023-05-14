@@ -16,7 +16,7 @@ function Holiday() {
             <p className="text-8xl italic font-bold">
                 <span className="text-9xl text-MentorPurple">{day}</span> dias
             </p>
-            <p className="mt-5 text-3xlitalic">{holidayName}</p>
+            <p className="mt-5 text-3xl italic">{holidayName}</p>
         </div>
     );
 }
