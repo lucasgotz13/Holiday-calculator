@@ -9,6 +9,7 @@ export const HolidayProvider = ({ children }) => {
     const [day, setDay] = useState<number>(0);
     const [month, setMonth] = useState<number>(0);
     const [year, setYear] = useState<number>(0);
+    const [holidayName, setHolidayName] = useState<string>("");
 
     return (
         <HolidayContext.Provider
@@ -20,8 +21,10 @@ export const HolidayProvider = ({ children }) => {
                 day,
                 month,
                 year,
+                holidayName,
                 setMonth,
                 setYear,
+                setHolidayName,
             }}
         >
             {children}

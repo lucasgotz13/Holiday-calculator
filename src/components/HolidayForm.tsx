@@ -36,7 +36,8 @@ function HolidayForm() {
     const [dayValue, setDayValue] = useState<string>();
     const [monthValue, setMonthValue] = useState<string>();
     //@ts-ignore
-    const { day, month, setDay, setMonth } = useContext(HolidayContext);
+    const { day, month, setDay, setMonth, setHolidayName } =
+        useContext(HolidayContext);
 
     const handleForm = (e: object) => {
         //@ts-ignore
@@ -61,7 +62,7 @@ function HolidayForm() {
             diferenciaEnMilisegundos / 86400000
         );
         const diferenciaEnMeses: number = Math.floor(diferenciaEnDias / 30);
-
+        setHolidayName(nextHoliday.name);
         handleDayMonth(today, diferenciaEnDias, diferenciaEnMeses);
     };
 
@@ -108,7 +109,7 @@ function HolidayForm() {
             diferenciaEnMilisegundos / 86400000
         );
         const diferenciaEnMeses = Math.floor(diferenciaEnDias / 30);
-
+        setHolidayName(nextHoliday.name);
         handleDayMonth(today, diferenciaEnDias, diferenciaEnMeses);
     }, []);
 
