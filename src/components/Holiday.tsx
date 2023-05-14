@@ -8,6 +8,7 @@ function Holiday() {
 
     return (
         <div className="mt-10 flex flex-col items-center font-Poppins">
+            <p className="mb-5 text-3xl">El proximo feriado es dentro de:</p>
             <p className="text-8xl italic font-bold">
                 <span className="text-9xl text-MentorPurple">{month}</span>{" "}
                 meses
@@ -15,10 +16,7 @@ function Holiday() {
             <p className="text-8xl italic font-bold">
                 <span className="text-9xl text-MentorPurple">{day}</span> dias
             </p>
-            <p className="mt-5 text-3xl">
-                El proximo feriado es:{" "}
-                <span className="italic">{holidayName}</span>
-            </p>
+            <p className="mt-5 text-3xlitalic">{holidayName}</p>
         </div>
     );
 }
