@@ -2,7 +2,9 @@ import { useContext } from "react";
 import { HolidayContext } from "../context/HolidayContext";
 
 function Holiday() {
-    const { day, month } = useContext(HolidayContext);
+    //@ts-ignore
+    const { day, month }: { day: number; month: number } =
+        useContext(HolidayContext);
 
     return (
         <div className="mt-20 flex flex-col justify-center font-Poppins">

@@ -41,7 +41,6 @@ function HolidayForm() {
     const handleForm = (e: object) => {
         //@ts-ignore
         e.preventDefault();
-        //@ts-ignore
         const today: Date = new Date(`2023-${monthValue}-${dayValue}`);
         //@ts-ignore
         if (isNaN(today)) return;
