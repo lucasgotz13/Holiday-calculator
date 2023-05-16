@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { HolidayContext } from "../context/HolidayContext";
 
 const HOLIDAYS = [
@@ -35,15 +35,13 @@ const HOLIDAYS = [
 function HolidayForm() {
     const [dayValue, setDayValue] = useState<string>();
     const [monthValue, setMonthValue] = useState<string>();
-    //@ts-ignore
-    const { day, month, setDay, setMonth, setHolidayName } =
+    const { setDay, setMonth, setHolidayName } =
         useContext(HolidayContext);
 
-    const handleForm = (e: object) => {
-        //@ts-ignore
+    const handleForm = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         const today: Date = new Date(`2023-${monthValue}-${dayValue}`);
-        //@ts-ignore
+        // @ts-ignore
         if (isNaN(today)) return;
         const nextHoliday = HOLIDAYS.find(
             (holiday) => holiday.date > today
@@ -101,7 +99,6 @@ function HolidayForm() {
                 HOLIDAYS[0].date.getDate() + 1
             ),
         };
-
         const diferenciaEnMilisegundos =
             nextHoliday.date.getTime() - today.getTime();
 
@@ -114,7 +111,7 @@ function HolidayForm() {
     }, []);
 
     return (
-        <form className="mt-20 flex items-center gap-5 justify-center">
+        <form className="flex items-center gap-5 justify-center">
             <div className="flex flex-col">
                 <label
                     htmlFor="day"

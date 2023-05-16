@@ -1,29 +1,39 @@
 import { createContext, useState } from "react";
 
-export const HolidayContext = createContext(0);
+interface HolidayContextProps {
+    day: number;
+    month: number;
+    holidayName: string;
+    setDay: (day: number) => void;
+    setMonth: (month: number) => void;
+    setHolidayName: (holidayName: string) => void;
+}
+
+export const HolidayContext = createContext<HolidayContextProps>({
+    day: 0,
+    month: 0,
+    holidayName: "",
+    setDay: () => {},
+    setMonth: () => {},
+    setHolidayName: () => {},
+});
 
 // @ts-ignore
 
 export const HolidayProvider = ({ children }) => {
-    const [count, setCount] = useState<number>(1);
     const [day, setDay] = useState<number>(0);
     const [month, setMonth] = useState<number>(0);
-    const [year, setYear] = useState<number>(0);
     const [holidayName, setHolidayName] = useState<string>("");
 
     return (
         <HolidayContext.Provider
             // @ts-ignore
             value={{
-                count,
-                setCount,
                 setDay,
                 day,
                 month,
-                year,
                 holidayName,
                 setMonth,
-                setYear,
                 setHolidayName,
             }}
         >
